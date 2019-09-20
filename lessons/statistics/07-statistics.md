@@ -69,16 +69,87 @@ Cohen's D is an example of effect size.  Other examples of effect size are:  cor
 
 You will see effect size again and again in results of algorithms that are run in data science.  For instance, in the bootcamp, when you run a regression analysis, you will recognize the t-statistic as an example of effect size.
 
+**Solution** *(Taken from [this repo](https://github.com/tracyteague/ThinkStats2/tree/master/code))*
+> Based on the mean difference, first babies are .125 pounds lighter than other babies. The difference in means for total weight in pounds is -.089, which is very small. 
+```
+firsts.totalwgt_lb.mean(), others.totalwgt_lb.mean()
+firsts.totalwgt_lb.mean()-others.totalwgt_lb.mean()
+CohenEffectSize(firsts.totalwgt_lb, others.totalwgt_lb)
+```
+
 ### Q2. [Think Stats Chapter 3 Exercise 1](3-1-actual_biased.md) (actual vs. biased)
 This problem presents a robust example of actual vs biased data.  As a data scientist, it will be important to examine not only the data that is available, but also the data that may be missing but highly relevant.  You will see how the absence of this relevant data will bias a dataset, its distribution, and ultimately, its statistical interpretation.
+
+**Solution** *(Taken from [this repo](https://github.com/tracyteague/ThinkStats2/tree/master/code))* 
+```
+resp = nsfg.ReadFemResp()
+children_under_18 = resp[resp.numkdhh < 18]
+
+# Compute actual distribution
+pmf = thinkstats2.Pmf(children_under_18['numkdhh'], label='actual')
+
+# Plot actual distribution
+thinkplot.Hist(pmf)
+thinkplot.Config(xlabel='Children under 18', ylabel='Pmf')
+
+thinkplot.Pmf(pmf)
+thinkplot.Config(xlabel='Children under 18', ylabel='Pmf')
+
+# Computer biased distribution
+biased_pmf = BiasPmf(pmf, label='biased')
+biased_pmf
+
+# Plot biased distribution
+thinkplot.Hist(biased_pmf)
+thinkplot.Config(xlabel='Children under 18', ylabel='Biased Pmf')
+
+thinkplot.Pmf(biased_pmf)
+thinkplot.Config(xlabel='Children under 18', ylabel='Biased Pmf')
+
+# Combine distribution graphs
+thinkplot.PrePlot(2)
+thinkplot.Pmfs([pmf, biased_pmf])
+thinkplot.Config(xlabel='Children under 18', ylabel='PMF')
+
+# Solution
+print(f"The mean of the actual distribution for the number of children under 18 is {pmf.Mean()}")
+print(f"The mean of the biased distribution for the number of children under 18 is {biased_pmf.Mean()}")
+```
 
 ### Q3. [Think Stats Chapter 4 Exercise 2](4-2-random_dist.md) (random distribution)  
 This questions asks you to examine the function that produces random numbers.  Is it really random?  A good way to test that is to examine the pmf and cdf of the list of random numbers and visualize the distribution.  If you're not sure what pmf is, read more about it in Chapter 3.  
 
+**Solution** *(Taken from [this repo](https://github.com/tracyteague/ThinkStats2/tree/master/code))*
+```
+# Generate random numbers
+random_numbers = np.random.random_sample(1000)
+
+# Plot PMF
+# pmf = thinkstats2.Pmf(random_numbers, label='random_numbers')
+pmf = thinkstats2.Pmf(random_numbers)
+thinkplot.Pmf(pmf)
+thinkplot.Config(xlabel='random numbers', ylabel='PMF')
+
+# Plot CDF
+# cdf = thinkstats2.Cdf(random_numbers, label='random numbers')
+cdf = thinkstats2.Cdf(random_numbers)
+thinkplot.Cdf(cdf)
+thinkplot.Config(xlabel='random numbers', ylabel='CDF')
+```
+
 ### Q4. [Think Stats Chapter 5 Exercise 1](5-1-blue_men.md) (normal distribution of blue men)
 This is a classic example of hypothesis testing using the normal distribution.  The effect size used here is the Z-statistic. 
 
+**Solution** *(Taken from [this repo](https://github.com/tracyteague/ThinkStats2/tree/master/code))*
+```
+# 5'10" = 177.8cm
+# 6'1" = 185.42cm
 
+men_five_ten = dist.cdf(177.8)
+men_six_one = dist.cdf(185.4)
+men_in_between = men_six_one - men_five_ten
+print(f"There are {men_in_between} men in between 5'10\" and 6'1\"")
+```
 
 ### Q5. Bayesian (Elvis Presley twin) 
 
